@@ -1,0 +1,4 @@
+storeFile=/caminho/para/corevent-work-upload.jks
+storePassword=SUBSTITUA_LOCALMENTE
+keyAlias=corevent-work-upload
+keyPassword=SUBSTITUA_LOCALMENTE

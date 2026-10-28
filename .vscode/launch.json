@@ -1,0 +1,7 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {"name": "Corevent Equipes", "request": "launch", "type": "dart"},
+    {"name": "Corevent Equipes · Staging", "request": "launch", "type": "dart", "toolArgs": ["--dart-define=COREVENT_API_URL=https://corevent-staging-api-666040325433.us-central1.run.app"]}
+  ]
+}
