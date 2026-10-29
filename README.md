@@ -45,15 +45,27 @@ semânticas. Sem sombras, gradientes ou brilhos.
 ```bash
 flutter pub get
 dart run build_runner build
-flutter run
+flutter run --flavor production
 ```
 
 A URL padrão é a mesma do aplicativo principal (`https://api.corevent.site`).
-Para outro ambiente:
+Para desenvolvimento com a API de testes:
 
 ```bash
-flutter run --dart-define=COREVENT_API_URL=https://sua-api
+flutter run --flavor development --dart-define=COREVENT_API_URL=https://corevent-staging-api-666040325433.us-central1.run.app
 ```
+
+Os flavors Android usam identificadores diferentes e podem ser instalados juntos:
+
+| Flavor | Application ID | API |
+| --- | --- | --- |
+| `production` | `com.corevent.corevent_work_app` | Produção por padrão |
+| `development` | `com.corevent.corevent_work_app.development` | Definida por `COREVENT_API_URL` |
+
+O flavor separa a instalação; a API é selecionada por `--dart-define` na compilação.
+Sem `COREVENT_API_URL`, ambos os flavors usam a URL padrão de produção. Sempre
+informe a URL de testes ao executar ou compilar o flavor `development`. Para usar
+outra API, substitua o valor de `COREVENT_API_URL` nos comandos.
 
 No emulador Android, uma API local usa `http://10.0.2.2:3000`. Em um dispositivo
 físico, use o IP acessível do computador ou `adb reverse tcp:3000 tcp:3000` com
@@ -63,10 +75,10 @@ O VS Code inclui configurações de execução para produção e staging.
 ## Verificar e compilar
 
 ```bash
-dart format lib test
+dart tool/format.dart --check
 flutter analyze
 flutter test
-flutter build apk --debug
+flutter build apk --debug --flavor development --dart-define=COREVENT_API_URL=https://corevent-staging-api-666040325433.us-central1.run.app
 ```
 
 Os testes desta etapa cobrem regras e widgets. Integração, E2E e validação física
@@ -77,8 +89,23 @@ Release exige assinatura própria em `android/key.properties`. Consulte
 Depois de configurar:
 
 ```bash
-flutter build apk --release --split-per-abi
+flutter build apk --release --flavor production --split-per-abi
 ```
 
 O único target do projeto é Android. O scanner e o modo totem precisam ser
 conferidos em um dispositivo com câmera antes da distribuição.
+
+## APKs no GitHub
+
+O workflow **Development APK** publica uma pré-release com APK de dev e checksum
+em pushes na `develop`. Ele usa a variável `COREVENT_API_URL` do ambiente `staging`
+e executa geração de código, análise e testes antes da compilação.
+
+O workflow **Release APK** executa manualmente na `main`, usa os secrets do
+ambiente `production` para assinar o APK e disponibiliza o arquivo nos artefatos
+da execução por 30 dias. A API padrão de produção é usada nesse build.
+
+Consulte [configuração, execução e download](.github/README.md).
+
+As verificações locais e os pontos pendentes de validação no GitHub estão no
+[registro de validação dos APKs](docs/apk-validation.md).
