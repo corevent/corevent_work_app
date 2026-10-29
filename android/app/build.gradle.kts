@@ -46,6 +46,17 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions += "environment"
+    productFlavors {
+        create("production") {
+            dimension = "environment"
+        }
+        create("development") {
+            dimension = "environment"
+            applicationIdSuffix = ".development"
+        }
+    }
+
     signingConfigs {
         create("release") {
             keyAlias = signingProperties.getProperty("keyAlias")
