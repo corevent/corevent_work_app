@@ -113,7 +113,7 @@ jobs:
           fi
       - name: Build release APK
         run: |
-          flutter build apk --release --flavor production --no-pub \
+          flutter build apk --release --flavor production \
             --build-number="$RELEASE_BUILD_NUMBER"
       - name: Verify and package APK
         run: |

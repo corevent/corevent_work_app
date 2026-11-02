@@ -61,6 +61,8 @@ jobs:
         run: bash .github/scripts/prepare_android_sdk.sh
       - name: Install dependencies
         run: flutter pub get
+      - name: Check CI helpers
+        run: python3 -m unittest discover -s .github/scripts -p 'test_*.py'
       - name: Generate code
         run: dart run build_runner build
       - name: Analyze
@@ -76,7 +78,7 @@ jobs:
         run: python3 .github/scripts/prepare_android_signing.py
       - name: Build development APK
         run: |
-          flutter build apk --release --flavor development --no-pub \
+          flutter build apk --release --flavor development \
             --build-number="$GITHUB_RUN_NUMBER" \
             --dart-define="COREVENT_API_URL=$COREVENT_API_URL"
       - name: Package APK and checksum
