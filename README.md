@@ -57,10 +57,13 @@ flutter run --flavor development --dart-define=COREVENT_API_URL=https://corevent
 
 Os flavors Android usam identificadores diferentes e podem ser instalados juntos:
 
-| Flavor | Application ID | API |
-| --- | --- | --- |
-| `production` | `com.corevent.corevent_work_app` | Produção por padrão |
-| `development` | `com.corevent.corevent_work_app.development` | Definida por `COREVENT_API_URL` |
+| Flavor | Nome no Android | Application ID | API |
+| --- | --- | --- | --- |
+| `production` | Corevent para Equipes | `com.corevent.corevent_work_app` | Produção por padrão |
+| `development` | dev-Corevent para Equipes | `com.corevent.corevent_work_app.development` | Definida por `COREVENT_API_URL` |
+
+O prefixo `dev-` identifica a instalação de desenvolvimento/staging, tanto em
+debug quanto em release. O nome exibido é definido pelo flavor.
 
 O flavor separa a instalação; a API é selecionada por `--dart-define` na compilação.
 Sem `COREVENT_API_URL`, ambos os flavors usam a URL padrão de produção. Sempre
