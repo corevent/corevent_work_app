@@ -112,3 +112,5 @@ Consulte [configuração, execução e download](.github/README.md).
 
 As verificações locais e os pontos pendentes de validação no GitHub estão no
 [registro de validação dos APKs](docs/apk-validation.md).
+
+Consulte o [guia de publicação de APKs nos buckets](docs/apk-publishing.md).
