@@ -1,3 +1,5 @@
+> Publicação nos buckets e assinatura de staging: [guia de APKs](../docs/apk-publishing.md).
+
 # GitHub Actions
 
 | Workflow | Branch | Ambiente | API | Download |
@@ -18,7 +20,7 @@ manuais em outras branches são ignoradas pelo job.
 
 Antes de compilar, instala as dependências, gera o código, executa a análise e os
 testes unitários e de widgets. Qualquer falha impede a publicação. O APK usa modo
-debug, flavor `development` e Application ID
+release com assinatura fixa de staging, flavor `development` e Application ID
 `com.corevent.corevent_work_app.development`.
 
 ### Configuração no GitHub
@@ -34,8 +36,8 @@ No repositório `corevent/corevent_work_app`:
 
 O workflow exige uma URL HTTPS e falha antes do build se ela estiver ausente ou
 inválida para essa verificação. A URL é passada por `--dart-define` para evitar o
-uso da API padrão de produção por falta de configuração. Não são necessários
-secrets de assinatura, credenciais GCP ou preparação da API para esse workflow.
+uso da API padrão de produção por falta de configuração. O workflow usa os secrets de assinatura de staging e autenticação temporária
+GCP para publicar no bucket privado.
 A publicação usa o `GITHUB_TOKEN` da própria execução com `contents: write`.
 
 ### Execução e download
@@ -54,8 +56,8 @@ commit compilado, sem marcar essa pré-release como a release mais recente.
 As notas incluem o commit, o modo de compilação e o identificador do app.
 Execuções são serializadas para não cancelar uma publicação em andamento.
 
-O runner gera a chave de assinatura de debug. Atualizações entre builds podem
-exigir desinstalar o APK de dev anterior, apagando os dados locais desse app.
+A assinatura de staging é fixa. A primeira migração de um APK debug exige
+reinstalar; as versões seguintes podem atualizar a instalação de staging.
 O flavor de produção possui outro identificador e pode ficar instalado junto.
 
 Esse workflow não publica na Google Play nem executa testes em aparelho ou
@@ -138,8 +140,8 @@ fica disponível por 30 dias e contém:
 - `signature.txt`: informações públicas da assinatura.
 - `release.txt`: commit, número do build e identificador do pacote.
 
-O workflow não cria GitHub Release, não publica na Google Play e não acessa a API
-para preparar dados. Os arquivos de assinatura não são enviados aos artefatos.
+O workflow publica também no bucket privado. Não cria GitHub Release nem publica
+na Google Play. Os arquivos de assinatura não são enviados aos artefatos.
 
 ### Verificações locais dos helpers
 
@@ -184,7 +186,7 @@ Para dev, use `corevent-work-development.apk` no mesmo comando.
 | Keystore não abre | Base64 e senha devem corresponder ao mesmo keystore. |
 | Alias ausente ou chave não recuperada | Confira `ANDROID_KEY_ALIAS` e `ANDROID_KEY_PASSWORD` para esse keystore. |
 | Build number inválido | Informe inteiro entre 1 e 2100000000; escolha um maior que o último distribuído. |
-| APK de dev não atualiza | A assinatura de debug pode mudar entre runners; pode ser necessário desinstalar o dev anterior. |
+| APK de dev não atualiza | Ao migrar do APK debug para a chave fixa de staging, reinstale uma vez; depois mantenha a mesma chave. |
 
 Consulte o [registro de validação](../docs/apk-validation.md) para distinguir as
 verificações locais das que precisam de execução no GitHub e no aparelho.

@@ -4,7 +4,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <application
         android:allowBackup="false"
-        android:label="Corevent para Equipes"
+        android:label="${appLabel}"
         android:name="${applicationName}"
         android:icon="@mipmap/work_launcher"
         android:roundIcon="@mipmap/work_launcher">
